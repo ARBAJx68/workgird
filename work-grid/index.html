@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkGrid - Find Skilled Workers</title>
+    <link rel="stylesheet" href="style.css">
+  <meta property="og:image" content="https://bolt.new/static/og_default.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="logo">
+                    <h1>WorkGrid</h1>
+                    <p class="tagline">Connect with skilled workers instantly</p>
+                </div>
+                <div class="auth-form">
+                    <h2>Welcome Back</h2>
+                    <p class="subtitle">Enter your mobile number to continue</p>
+                    <div class="input-group">
+                        <input type="tel" id="mobileInput" placeholder="Enter mobile number" maxlength="10">
+                    </div>
+                    <button class="btn-primary" id="sendOtpBtn">Send OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Role Selection Page -->
+    <div id="roleSelectPage" class="page">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="logo">
+                    <h1>WorkGrid</h1>
+                    <p class="tagline">Choose your role</p>
+                </div>
+                <div class="auth-form">
+                    <h2>Who are you?</h2>
+                    <p class="subtitle">Select your account type</p>
+                    <div class="role-buttons">
+                        <button class="role-btn worker-role" id="workerRoleBtn">
+                            <div class="role-icon">👷</div>
+                            <div class="role-title">Worker</div>
+                            <div class="role-desc">Find jobs and get hired</div>
+                        </button>
+                        <button class="role-btn recruiter-role" id="recruiterRoleBtn">
+                            <div class="role-icon">💼</div>
+                            <div class="role-title">Recruiter</div>
+                            <div class="role-desc">Post jobs and hire workers</div>
+                        </button>
+                    </div>
+                    <button class="btn-secondary" id="backFromRoleBtn">Back to Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- OTP Page -->
+    <div id="otpPage" class="page">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="logo">
+                    <h1>Work Grid</h1>
+                </div>
+                <div class="auth-form">
+                    <h2>Enter OTP</h2>
+                    <p class="subtitle">Enter the 6-digit code sent to your phone</p>
+                    <p class="demo-note">Demo OTP: 123456</p>
+                    <div class="otp-inputs">
+                        <input type="text" maxlength="1" class="otp-box" data-index="0">
+                        <input type="text" maxlength="1" class="otp-box" data-index="1">
+                        <input type="text" maxlength="1" class="otp-box" data-index="2">
+                        <input type="text" maxlength="1" class="otp-box" data-index="3">
+                        <input type="text" maxlength="1" class="otp-box" data-index="4">
+                        <input type="text" maxlength="1" class="otp-box" data-index="5">
+                    </div>
+                    <div id="otpError" class="error-message"></div>
+                    <button class="btn-primary" id="verifyOtpBtn">Verify OTP</button>
+                    <button class="btn-secondary" id="backToLoginBtn">Back to Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="page">
+        <header class="app-header">
+            <div class="container">
+                <h1>WorkGrid</h1>
+                <button class="logout-btn" id="logoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="dashboard-header">
+                <h2>Find Skilled Workers Near You</h2>
+                <p>Browse and hire verified professionals in your area</p>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="loading-spinner">
+                <div class="spinner"></div>
+                <p>Loading workers...</p>
+            </div>
+
+            <!-- Worker Grid -->
+            <div id="workerGrid" class="worker-grid"></div>
+        </main>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profilePage" class="page">
+        <header class="app-header">
+            <div class="container">
+                <button class="back-btn" id="backToDashboardBtn">← Back</button>
+                <h1>Worker Profile</h1>
+            </div>
+        </header>
+
+        <main class="container">
+            <div id="profileContent" class="profile-content"></div>
+        </main>
+    </div>
+
+    <!-- Recruiter Dashboard Page -->
+    <div id="recruiterDashboardPage" class="page">
+        <header class="app-header">
+            <div class="container">
+                <h1>Work Grid Recruiter</h1>
+                <button class="logout-btn" id="recruiterLogoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="recruiter-header">
+                <div>
+                    <h2>Manage Your Jobs</h2>
+                    <p>Post and track job openings</p>
+                </div>
+                <button class="btn-primary new-job-btn" id="createJobBtn">+ Create New Job</button>
+            </div>
+
+            <div id="jobsList" class="jobs-list"></div>
+        </main>
+    </div>
+
+    <!-- Create Job Page -->
+    <div id="createJobPage" class="page">
+        <header class="app-header">
+            <div class="container">
+                <button class="back-btn" id="backToRecruiterBtn">← Back</button>
+                <h1>Create New Job</h1>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="job-form-container">
+                <form id="jobForm" class="job-form">
+                    <div class="form-group">
+                        <label>Job Title</label>
+                        <input type="text" id="jobTitle" placeholder="e.g., Experienced Mason" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Job Description</label>
+                        <textarea id="jobDescription" placeholder="Describe the job requirements..." rows="4" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Daily Wage (₹)</label>
+                            <input type="number" id="jobWage" placeholder="700" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <input type="text" id="jobLocation" placeholder="City Chowk" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Workers Needed</label>
+                            <input type="number" id="jobWorkers" placeholder="1" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Job Category</label>
+                            <select id="jobCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="Mason">Mason</option>
+                                <option value="Carpenter">Carpenter</option>
+                                <option value="Painter">Painter</option>
+                                <option value="Electrician">Electrician</option>
+                                <option value="Plumber">Plumber</option>
+                                <option value="Helper">Helper</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Post Job</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Profile Setup Page -->
+    <div id="profileSetupPage" class="page">
+        <div class="auth-container">
+            <div class="auth-card" style="max-width: 500px;">
+                <div class="logo">
+                    <h1>Set Up Profile</h1>
+                    <p class="tagline">Add your profile picture</p>
+                </div>
+                <div class="auth-form">
+                    <div class="profile-pic-upload">
+                        <div class="profile-pic-preview" id="profilePicPreview">
+                            <span id="profilePicPlaceholder">📷</span>
+                            <img id="profilePicImage" alt="Profile" style="display: none;">
+                        </div>
+                        <input type="file" id="profileFileInput" accept="image/*" style="display: none;">
+                        <div class="upload-options">
+                            <button class="upload-option-btn" id="galleryBtn">
+                                <div class="option-icon">🖼️</div>
+                                <div>Choose from Gallery</div>
+                            </button>
+                            <button class="upload-option-btn" id="cameraBtn">
+                                <div class="option-icon">📸</div>
+                                <div>Take Photo</div>
+                            </button>
+                            <button class="upload-option-btn" id="uploadBtn">
+                                <div class="option-icon">📁</div>
+                                <div>Upload from Device</div>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn-primary" id="continueAfterProfileBtn" disabled>Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Capture Modal -->
+    <div id="cameraModal" class="modal">
+        <div class="modal-content camera-content">
+            <div class="modal-header">
+                <h3>Take Photo</h3>
+                <button class="close-modal-btn" id="closeCameraBtn">✕</button>
+            </div>
+            <video id="cameraVideo" autoplay playsinline style="width: 100%; border-radius: 10px; margin-bottom: 15px;"></video>
+            <canvas id="cameraCanvas" style="display: none;"></canvas>
+            <div class="camera-controls">
+                <button class="btn-secondary" id="cancelCameraBtn">Cancel</button>
+                <button class="btn-primary" id="captureCameraBtn">Capture</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Worker Dashboard Page -->
+    <div id="workerDashboardPage" class="page">
+        <header class="app-header">
+            <div class="container">
+                <h1>My Dashboard</h1>
+                <button class="logout-btn" id="workerLogoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">💼</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Jobs Completed</div>
+                        <div class="stat-value" id="jobsCompleted">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total Earned</div>
+                        <div class="stat-value" id="totalEarned">₹0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Average Rating</div>
+                        <div class="stat-value" id="avgRating">5.0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-content">
+                        <div class="stat-label">Days Worked</div>
+                        <div class="stat-value" id="daysWorked">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-section">
+                <h2>Work History</h2>
+                <div id="workerHistory" class="history-list"></div>
+            </div>
+
+            <button class="btn-primary" id="browseJobsBtn">Browse Jobs</button>
+        </main>
+    </div>
+
+    <!-- Recruiter Workers List Page -->
+    <div id="recruiterWorkersPage" class="page">
+        <header class="app-header">
+            <div class="container">
+                <button class="back-btn" id="backFromWorkersBtn">← Back</button>
+                <h1>Available Workers</h1>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="worker-grid" id="recruiterWorkerGrid"></div>
+        </main>
+    </div>
+
+    <!-- Recruiter Worker Profile Page -->
+    <div id="recruiterWorkerProfilePage" class="page">
+        <header class="app-header">
+            <div class="container">
+                <button class="back-btn" id="backFromWorkerProfileBtn">← Back</button>
+                <h1>Worker Profile</h1>
+            </div>
+        </header>
+
+        <main class="container">
+            <div id="recruiterWorkerProfileContent" class="profile-content"></div>
+        </main>
+    </div>
+
+    <!-- Recruiter Stats Dashboard Page -->
+    <div id="recruiterStatsPage" class="page">
+        <header class="app-header">
+            <div class="container">
+                <h1>Hiring Dashboard</h1>
+                <button class="logout-btn" id="recruiterStatsLogoutBtn">Logout</button>
+            </div>
+        </header>
+
+        <main class="container">
+            <div class="recruiter-stats-header">
+                <button class="tab-btn active" id="statsTabBtn">Statistics</button>
+                <button class="tab-btn" id="workersTabBtn">Browse Workers</button>
+            </div>
+
+            <div id="statsTab" class="tab-content active">
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon">📋</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Active Jobs</div>
+                            <div class="stat-value" id="activeJobs">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Completed Hires</div>
+                            <div class="stat-value" id="completedHires">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Workers Hired</div>
+                            <div class="stat-value" id="workersHired">0</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">💵</div>
+                        <div class="stat-content">
+                            <div class="stat-label">Total Spent</div>
+                            <div class="stat-value" id="totalSpent">₹0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="history-section">
+                    <h2>Hiring History</h2>
+                    <div id="recruiterHistory" class="history-list"></div>
+                </div>
+            </div>
+
+            <div id="workersTab" class="tab-content"></div>
+
+            <button class="btn-primary" id="managejobsFromStatsBtn">Manage Jobs</button>
+        </main>
+    </div>
+
+    <!-- Booking Success Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <div class="success-icon">✓</div>
+            <h2>Booking Confirmed Successfully</h2>
+            <p>The worker will contact you shortly</p>
+            <button class="btn-primary" id="closeModalBtn">Close</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
